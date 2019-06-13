@@ -3,5 +3,6 @@
     <pages>
         <page name='9_Palindrome_Number'/>
         <page name='7_Reverse_Integer'/>
+        <page name='14_Longest_Common_Prefix'/>
     </pages>
 </playground>
