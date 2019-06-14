@@ -115,9 +115,9 @@ class OfficialSolution_1 {
 	}
 }
 
-let officialSolution = OfficialSolution_1()
-let theAnswer = officialSolution.longestCommonPrefix(["flow", "flow", "flow"])
-theAnswer
+//let officialSolution = OfficialSolution_1()
+//let theAnswer = officialSolution.longestCommonPrefix(["flow", "flow", "flow"])
+//theAnswer
 
 /*
 	复杂度分析
@@ -133,6 +133,53 @@ theAnswer
 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
 */
 
+/*
+	算法二：水平扫描
+
+	算法
+
+	想象数组的末尾有一个非常短的字符串，使用上述方法依旧会进行S​次比较。优化这类情况的一种方法就是水平扫描。我们从前往后枚举字符串的每一列，先比较每个字符串相同列上的字符（即不同字符串相同下标的字符）然后再进行对下一列的比较。
+
+	作者：LeetCode
+	链接：https://leetcode-cn.com/problems/two-sum/solution/zui-chang-gong-gong-qian-zhui-by-leetcode/
+	来源：力扣（LeetCode）
+	著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+
+*/
+
+class OfficialSolution_2 {
+	func longestCommonPrefix(_ strs: [String]) -> String {
+		guard strs.count != 0 else { return "" }
+		for i in 0..<strs[0].count {
+			let index = strs[0].index(strs[0].startIndex, offsetBy: i)
+			let c = strs[0][index]
+			for j in 1..<strs.count {
+				if i == strs[j].count || strs[j][index] != c {
+					return String(strs[0][..<index])
+				}
+			}
+		}
+		return strs[0]
+	}
+}
+
+let officialSolution = OfficialSolution_2()
+let theAnswer = officialSolution.longestCommonPrefix(["flower", "flow", "flight"])
+theAnswer
+
+/*
+	复杂度分析
+
+	时间复杂度：O(S)，S 是所有字符串中字符数量的总和。
+
+	最坏情况下，输入数据为n个长度为m的相同字符串，算法会进行S=m*n次比较。可以看到最坏情况下，本算法的效率与算法一相同，但是最好的情况下，算法只需要进行 n*minLen 次比较，其中 minLen 是数组中最短字符串的长度。
+
+	空间复杂度：O(1)，我们只需要使用常数级别的额外空间。
+
+*/
+
 /*****   Official Answer   ****/
+
+
 
 //: [Next](@next)
