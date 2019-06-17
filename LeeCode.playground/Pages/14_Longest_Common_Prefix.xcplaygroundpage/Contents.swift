@@ -163,9 +163,9 @@ class OfficialSolution_2 {
 	}
 }
 
-let officialSolution = OfficialSolution_2()
-let theAnswer = officialSolution.longestCommonPrefix(["flower", "flow", "flight"])
-theAnswer
+//let officialSolution = OfficialSolution_2()
+//let theAnswer = officialSolution.longestCommonPrefix(["flower", "flow", "flight"])
+//theAnswer
 
 /*
 	复杂度分析
@@ -177,6 +177,76 @@ theAnswer
 	空间复杂度：O(1)，我们只需要使用常数级别的额外空间。
 
 */
+
+/*
+    算法三：分治
+ 
+    思路
+ 
+    这个算法的思路来自于LCP操作的结合律。 我们可以发现：LCP(S_1...S_n) = LCP(LCP(S_1...S_k), LCP (S_{k+1}...S_n))，其中 LCP(S_1...S_n)是字符串 [S_1...S_n] 的最长公共前缀，1 < k < n。
+ 
+    算法
+ 
+    为了应用上述的结论，我们使用分治的技巧，将原问题 LCP(Si...Sj)分成两个子问题LCP(Si...Smid)与LCP(S{mid+1}...Sj),其中mid= (i+j)/2,我们用子问题的解lcpLeft与lcpRight构造原问题的解LCP(Si...Sj).从头到尾挨个比较lcpLeft与lcpRight中的字符，直到不能再匹配为止。 计算所得的 lcpLeft 与 lcpRight最长公共前缀就是原问题的解LCP(Si...Sj)
+ 
+ 作者：LeetCode
+ 链接：https://leetcode-cn.com/problems/two-sum/solution/zui-chang-gong-gong-qian-zhui-by-leetcode/
+ 来源：力扣（LeetCode）
+ 著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
+ 
+ */
+
+class OfficialSolution_3 {
+    func longestCommonPrefix(_ strs: [String]) -> String {
+        if strs.count == 0 {
+            return ""
+        }
+        return longestCommonPrefix(strs, 0, strs.count - 1)
+    }
+    
+    func longestCommonPrefix(_ strs: [String], _ l: Int, _ r: Int) -> String {
+        if l == r {
+            return strs[l]
+        }
+        let mid = (l + r) / 2
+        let lcpLeft = longestCommonPrefix(strs, l, mid)
+        let lcpRight = longestCommonPrefix(strs, mid + 1, r)
+        return commonPrefix(lcpLeft, lcpRight)
+    }
+    
+    func commonPrefix(_ left: String, _ right: String) -> String {
+        let min: Int = [left.count, right.count].min() ?? 0
+        var index = left.index(left.startIndex, offsetBy: 0)
+        for i in 0..<min {
+            index = left.index(left.startIndex, offsetBy: i)
+            if left[index] != right[index] {
+                return String(left[..<index])
+            }
+        }
+        index = left.index(left.startIndex, offsetBy: min)
+        return String(left[..<index])
+    }
+}
+
+
+let officialSolution = OfficialSolution_3()
+let theAnswer = officialSolution.longestCommonPrefix(["flow", "flow", "flow"])
+theAnswer
+
+/*
+ 
+    复杂度分析
+ 
+    最坏情况下，我们有 n 个长度为 m 的相同字符串。
+ 
+    时间复杂度：O(S), S是所有字符串中字符数量的总和, S = m * n
+ 时间复杂度的递推式为 T(n) = 2 * T(n/2) + O(m), 化简后可知其就是O(S),最好情况下，算法会进行minLen * n次比较，其中minLen是数组中最短字符串的长度.
+ 
+    空间复杂度: O(m*log(n))
+ 
+    内存开支主要是递归过程中使用的栈空间所消耗的。 一共会进行log(n)次递归，每次需要 m的空间存储返回结果，所以空间复杂度为O(m * log(n))
+ 
+ */
 
 /*****   Official Answer   ****/
 
