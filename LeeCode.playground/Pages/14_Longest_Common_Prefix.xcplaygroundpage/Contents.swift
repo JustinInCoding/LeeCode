@@ -229,9 +229,9 @@ class OfficialSolution_3 {
 }
 
 
-let officialSolution = OfficialSolution_3()
-let theAnswer = officialSolution.longestCommonPrefix(["flow", "flow", "flow"])
-theAnswer
+//let officialSolution = OfficialSolution_3()
+//let theAnswer = officialSolution.longestCommonPrefix(["flow", "flow", "flow"])
+//theAnswer
 
 /*
  
@@ -247,6 +247,62 @@ theAnswer
     内存开支主要是递归过程中使用的栈空间所消耗的。 一共会进行log(n)次递归，每次需要 m的空间存储返回结果，所以空间复杂度为O(m * log(n))
  
  */
+
+/*
+	方法四：二分查找法
+
+	这个想法是应用二分查找法找到所有字符串的公共前缀的最大长度 L。 算法的查找区间是(0...minLen)，其中 minLen是输入数据中最短的字符串的长度，同时也是答案的最长可能长度。每一次将查找区间一分为二，然后丢弃一定不包含最终答案的那一个。算法进行的过程中一共会出现两种可能情况：
+
+	* S[1...mid] 不是所有串的公共前缀。 这表明对于所有的 j > i S[1...j] 也不是公共前缀，于是我们就可以丢弃后半个查找区间。
+	* S[1...mid] 是所有串的公共前缀。 这表示对于所有的 i < j S[1...i] 都是可行的公共前缀，因为我们要找最长的公共前缀，所以我们可以把前半个查找区间丢弃。
+
+*/
+
+class OfficialSolution_4 {
+	func longestCommonPrefix(_ strs: [String]) -> String {
+		guard strs.count > 0 else { return "" }
+		var minLen = Int.max
+		for str in strs {
+			minLen = [minLen, str.count].min() ?? 0
+		}
+		var low = 1
+		var high = minLen
+		while low <= high {
+			let middle = (low + high) / 2
+			if isCommonPrefix(strs, middle) {
+				low = middle + 1
+			} else {
+				high = middle - 1
+			}
+		}
+		let index = strs[0].index(strs[0].startIndex, offsetBy: (low + high) / 2)
+		return String(strs[0][..<index])
+	}
+
+	func isCommonPrefix(_ strs: [String], _ len: Int) -> Bool {
+		let index = strs[0].index(strs[0].startIndex, offsetBy: len)
+		let str1 = String(strs[0][..<index])
+		for str in strs {
+			if !str.starts(with: str1) {
+				return false
+			}
+		}
+		return true
+	}
+}
+
+let officialSolution = OfficialSolution_4()
+let theAnswer = officialSolution.longestCommonPrefix(["dog", "racecar", "car"])
+theAnswer
+
+/*
+	复杂度分析
+
+	最坏情况下，我们有 n 个长度为 m 的相同字符串。
+	* 时间复杂度：O(S*log(n))，其中S所有字符串中字符数量的总和。 算法一共会进行log(n)次迭代，每次一都会进行S=m*n次比较，所以总时间复杂度为O(S*log(n))
+	* 空间复杂度：O(1)，我们只需要使用常数级别的额外空间。
+
+*/
 
 /*****   Official Answer   ****/
 
