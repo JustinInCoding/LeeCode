@@ -4,5 +4,7 @@
         <page name='9_Palindrome_Number'/>
         <page name='7_Reverse_Integer'/>
         <page name='14_Longest_Common_Prefix'/>
+        <page name='13_Romen_to_Integer'/>
+        <page name='Play'/>
     </pages>
 </playground>
